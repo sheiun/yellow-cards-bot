@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import logging
+from enum import IntEnum
 from typing import Optional
 
 from board import Board
@@ -8,9 +11,19 @@ from deck import Deck
 
 
 class Game:
-    current_player: Optional["User"] = None  # who choose a purple color
+    class State(IntEnum):
+        """The state represents current state"""
+
+        START = 0
+        PURPLE = 1
+        YELLOW = 2
+        LOSE = 3
+        DISCARD = 4
+        END = 5
+
+    current_player: Optional["User"] = None
     starter: Optional["User"] = None
-    started = False
+    state: Game.State = State.START
     open = OPEN_LOBBY
 
     def __init__(self, chat):
@@ -22,12 +35,21 @@ class Game:
 
         self.logger = logging.getLogger(__name__)
 
+    @property
+    def started(self) -> bool:
+        return self.state > Game.State.START
+
+    @property
+    def ended(self) -> bool:
+        return self.state < Game.State.END
+
     def start(self):
         self.yellow_deck.init(YELLOW_CARDS.copy())
         self.purple_deck.init(PURPLE_CARDS.copy())
         self.board.init()
 
-        self.started = True
+        self.state += 1
+        self.logger.info(f"{self.state} == {self.State.PURPLE}")
 
         for player in self.players:
             player.draw_first_hand()
@@ -36,7 +58,10 @@ class Game:
         self.current_player = self.current_player.next
         for player in self.players:
             player.draw()
+        if self.board.loser:
+            self.board.loser.discard_amount = 0
         self.board.init()
+        self.state = self.State.PURPLE
 
     @property
     def players(self):

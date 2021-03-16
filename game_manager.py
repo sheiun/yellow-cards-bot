@@ -121,10 +121,7 @@ class GameManager:
                 del self.userid_players[user.id]
 
     def end_game(self, chat, user):
-        """
-        End a game
-        """
-
+        """ End a game  """
         self.logger.info("Game in chat " + str(chat.id) + " ended")
 
         # Find the correct game instance to end
@@ -134,6 +131,7 @@ class GameManager:
             raise NoGameInChatError
 
         game = player.game
+        game.state = game.State.END
 
         # Clear game
         for player_in_game in game.players:

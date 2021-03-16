@@ -2,16 +2,22 @@ import logging
 from random import shuffle
 from typing import Dict, List, Optional, Tuple
 
+from card import PURPLE, YELLOW
+
 
 class Board:
-    purple: Optional["Card"]
-    yellow: Dict["Player", List["Card"]]
+    purple: Optional["Card"] = None
+    yellow: Dict["Player", List["Card"]] = {}
+    loser: Optional["User"] = None
 
     def __init__(self, game):
         self.game: "Game" = game
         self.init()
 
+        self.logger = logging.getLogger(__name__)
+
     def init(self):
+        self.loser = None
         self.purple = None
         self.yellow = {}
         for player in self.game.players:
@@ -24,15 +30,22 @@ class Board:
     def play_card_by(self, player: "Player", card: "card"):
         """Called from Player.play"""
         if player == self.game.current_player:
-            # FIXME: will this be happened, should be removed?
-            if self.purple is not None:
-                raise Exception("Purple card is played")
+            self.logger.info(f"{card.color} == {PURPLE}")
+            self.logger.info(f"{self.purple} is None")
             self.purple = card
-            self.game.logger.info(f"{self.purple} {self.purple.space}")
             [self.game.purple_deck.draw() for _ in range(2)]
+
+            self.game.logger.info(f"{self.purple} {self.purple.space}")
+
+            self.game.state += 1
+
+            self.logger.info(f"{self.game.state} == {self.game.State.YELLOW}")
         else:
-            # FIXME: will be played out of count?
+            self.logger.info(f"{card.color} == {YELLOW}")
+
             self.yellow[player].append(card)
+            if self.is_others_played:
+                self.game.state += 1
 
     @property
     def is_others_played(self) -> bool:

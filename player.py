@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import logging
 
 from card import YELLOW
+from errors import TooManyCardsError, NotEnoughPlayersError
 
 
 class Player:
@@ -15,6 +18,7 @@ class Player:
         self.game = game
         self.user = user
 
+        self.discard_amount = 0
         self.cards = []
         self.purple_cards = []
         self.score = 0
@@ -32,6 +36,22 @@ class Player:
             self.prev = self
             game.current_player = self
 
+    @property
+    def left(self) -> Player:
+        return self.next
+
+    @property
+    def right(self) -> Player:
+        return self.right
+
+    @property
+    def front(self) -> Player:
+        if len(self.game.players) < 4:
+            raise NotEnoughPlayersError()
+        if len(self.game.players) <= 7:
+            return self.next.next
+        return self.next.next.next
+
     def draw_first_hand(self):
         for _ in range(13):
             self.cards.append(self.game.yellow_deck.draw())
@@ -47,6 +67,7 @@ class Player:
         self.prev = None
 
         self.cards = []
+        self.discard_amount = 0
 
     def __repr__(self):
         return repr(self.user)
@@ -61,11 +82,23 @@ class Player:
     def play(self, card: "Card"):
         """Plays a card and removes it from hand"""
         if card.color == YELLOW:
+            if len(self.game.board.yellow[self]) >= self.game.board.purple.space:
+                raise TooManyCardsError()
             self.cards.remove(card)
         self.game.board.play_card_by(self, card)
 
     def discard(self, card: "Card"):
+        if self.discard_amount == 0:
+            # TODO:
+            raise Exception("You can't disacrd!")
         self.cards.remove(card)
+
+    @property
+    def discarded(self) -> bool:
+        # own cards + played cards + discarded cards == 13
+        return (
+            len(self.cards) == 13 - self.game.board.purple.space - self.discard_amount
+        )
 
     @property
     def can_play(self) -> bool:
