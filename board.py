@@ -1,0 +1,58 @@
+import logging
+from random import shuffle
+from typing import Dict, List, Optional, Tuple
+
+
+class Board:
+    purple: Optional["Card"]
+    yellow: Dict["Player", List["Card"]]
+
+    def __init__(self, game):
+        self.game: "Game" = game
+        self.init()
+
+    def init(self):
+        self.purple = None
+        self.yellow = {}
+        for player in self.game.players:
+            if player != self.game.current_player:
+                self.yellow[player] = []
+        order = list(range(1, len(self.yellow.keys()) + 1))
+        shuffle(order)
+        self.order = order
+
+    def play_card_by(self, player: "Player", card: "card"):
+        """Called from Player.play"""
+        if player == self.game.current_player:
+            # FIXME: will this be happened, should be removed?
+            if self.purple is not None:
+                raise Exception("Purple card is played")
+            self.purple = card
+            self.game.logger.info(f"{self.purple} {self.purple.space}")
+            [self.game.purple_deck.draw() for _ in range(2)]
+        else:
+            # FIXME: will be played out of count?
+            self.yellow[player].append(card)
+
+    @property
+    def is_others_played(self) -> bool:
+        for cards in self.yellow.values():
+            if len(cards) != self.purple.space:
+                return False
+        return True
+
+    def get_cards(self) -> List[Tuple[str, List["Card"]]]:
+        return [
+            (str(i + 1), x)
+            for i, (_, x) in enumerate(sorted(zip(self.order, self.yellow.values())))
+        ]
+
+    def get_players(self) -> List[Tuple[str, "Player"]]:
+        return [
+            (str(i + 1), x)
+            for i, (_, x) in enumerate(sorted(zip(self.order, self.yellow.keys())))
+        ]
+
+    def get_loser(self, selected: int) -> "Player":
+        index = self.order.index(selected)
+        return list(self.yellow.keys())[index]

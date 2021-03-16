@@ -1,0 +1,5 @@
+new - 開房 
+kill - 砍掉 
+join - 加入 
+leave - 離開 
+start - 開始 
