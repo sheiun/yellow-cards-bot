@@ -40,7 +40,7 @@ from utils import (
 )
 
 logging.basicConfig(
-    format="%(asctime)s - %(pathname)s:%(lineno)d - %(levelname)s - %(message)s",
+    format="%(asctime)s - %(filename)s:%(lineno)d - %(levelname)s - %(message)s",
     level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
