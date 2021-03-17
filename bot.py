@@ -84,7 +84,7 @@ class Room:
             else:
                 update.message.reply_text(make_room_info(game))
         else:
-            update.message.reply_text("目前沒有房間！")
+            update.message.reply_text("目前沒有房間！請用 /new 開房！")
 
     def new(self, update: Update, context: CallbackContext):
         chat = update.message.chat
@@ -95,17 +95,17 @@ class Room:
         if games:
             game = games[-1]
             if game.started and len(game.players) >= MIN_PLAYERS:
-                update.message.reply_text("已經開始ㄌ")
-                return
-            # TODO: 加點訊息?
-            # text = "已經有人開ㄌ"
-            context.bot.send_message(chat.id, text=make_room_info(game))
+                text = "已經開始ㄌ用 /join 中途插入ㄅ"
+            else:
+                text = "房間早就開ㄌ，用 /info 查看資訊，用 /join 加入"
+            update.message.reply_text(text)
             return
 
         game = gm.new_game(update.message.chat)
         game.starter = update.message.from_user
-        # TODO: auto join
-        update.message.reply_text("幫你開ㄌ")
+        update.message.reply_text("幫你開ㄌ，其他人可以用 /join 加入")
+        # NOTE: auto join
+        self.join(update, context)
 
     def kill(self, update: Update, context: CallbackContext):
         chat = update.message.chat

@@ -79,7 +79,7 @@ def make_room_info(game) -> str:
     text = HEADER.format(text="房間")
     others = [p.user for p in game.players]
     others.remove(game.starter)
-    text = f"房主：{game.starter}\n"
+    text += f"房主：{display_name(game.starter)}\n"
     for u in others:
         text += display_name(u) + "\n"
     return text.rstrip()
