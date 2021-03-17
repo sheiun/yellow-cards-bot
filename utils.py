@@ -76,7 +76,7 @@ def make_loser_discard(game) -> str:
 
 
 def make_room_info(game) -> str:
-    text = HEADER.format("房間")
+    text = HEADER.format(text="房間")
     others = [p.user for p in game.players]
     others.remove(game.starter)
     text = f"房主：{game.starter}\n"
