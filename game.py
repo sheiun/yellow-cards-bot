@@ -41,7 +41,7 @@ class Game:
 
     @property
     def ended(self) -> bool:
-        return self.state < Game.State.END
+        return self.state == Game.State.END
 
     def start(self):
         self.yellow_deck.init(YELLOW_CARDS.copy())
