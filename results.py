@@ -14,24 +14,6 @@ def add_purple_cards(results, game: "Game"):
         )
 
 
-# def add_cards(results, player, can_play):
-#     """Add player's cards"""
-#     if can_play:
-#         content = "打出了一張 " + YELLOW_CARD
-#         prefix = "yellow"
-#     else:
-#         content = f"我想打出一張 {YELLOW_CARD} 但被阻止ㄌ"
-#         prefix = ""
-#     for card in player.cards:
-#         results.append(
-#             Sticker(
-#                 prefix + str(card),
-#                 sticker_file_id=card.sticker["file_id"],
-#                 input_message_content=InputTextMessageContent(content),
-#             )
-#         )
-
-
 def add_cards(results, player):
     """Add player's cards"""
     content = "選ㄌ一張 " + YELLOW_CARD
