@@ -3,6 +3,7 @@ from telegram import InlineQueryResultCachedSticker as Sticker
 from telegram import InputTextMessageContent
 
 from card import YELLOW_CARD
+from game import Game
 
 
 def add_purple_cards(results, game: "Game"):

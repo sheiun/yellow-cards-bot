@@ -38,11 +38,11 @@ class Player:
 
     @property
     def left(self) -> Player:
-        return self.next
+        return self.prev
 
     @property
     def right(self) -> Player:
-        return self.right
+        return self.next
 
     @property
     def front(self) -> Player:

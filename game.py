@@ -6,7 +6,7 @@ from typing import Optional
 
 from board import Board
 from card import PURPLE_CARDS, YELLOW_CARDS
-from config import ADMIN_LIST, OPEN_LOBBY
+from config import OPEN_LOBBY
 from deck import Deck
 
 
