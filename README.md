@@ -2,13 +2,19 @@
 
 > A yellow cards game bot inspired by mau_mau_bot
 
-## Telegram Bot 設置
+## 遊玩
+
+將 [@YellowCardsBot](https://t.me/yellowcardsbot) 加到群組中即可遊玩！
+
+## 自架
 
 1. 找 BotFather (@BotFather) 建 Bot
 2. 將 token 填入 `config.json`
 3. 將 Bot 的 inlinemode 設為 Enable 並將 placeholder 設成 `🔼 選牌 🔼`
 4. 將 inlinefeedback 設為 Enable
 5. 設定 command list 從 `commandlist.txt` 複製
+6. 安裝依賴 `pip install -r requirements.txt`
+7. 執行 `python bot.py`
 
 ## 流程
 
