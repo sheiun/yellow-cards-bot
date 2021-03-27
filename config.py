@@ -7,4 +7,4 @@ TOKEN = config.get("token")
 WORKERS = config.get("workers", 32)
 ADMIN_LIST = config.get("admin_list", None)
 OPEN_LOBBY = config.get("open_lobby", True)
-MIN_PLAYERS = config.get("min_players", 2)  # TODO: set to 3
+MIN_PLAYERS = config.get("min_players", 3)  # TODO: set to 3

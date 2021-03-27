@@ -1,5 +1,3 @@
-import logging
-
 from card import PURPLE_CARD, YELLOW_CARD
 
 

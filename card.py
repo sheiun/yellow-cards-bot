@@ -1,4 +1,5 @@
 from json import load
+from typing import Any, Dict
 
 STICKERS_DICT = load(open("stickers.json"))
 PURPLE_SPACE_LIST = load(open("purple_space.json"))
@@ -13,17 +14,17 @@ COLOR_ICONS = {PURPLE: "🟪", YELLOW: "🟨"}
 
 
 class Card:
-    def __init__(self, color: str, sticker: dict, *args, **kwargs):
+    def __init__(self, color: str, sticker: Dict[str, Any], *args, **kwargs):
         self.color = color
         self.sticker = sticker
         if color == PURPLE:
-            self.space = kwargs.pop("space", 1)
+            self.space:int = kwargs.pop("space", 1)
 
     def __eq__(self, obj):
         return isinstance(obj, Card) and self.sticker["id"] == obj.sticker["id"]
 
-    @classmethod
-    def from_id(cls, id: str):
+    @staticmethod
+    def from_id(id: str):
         # TODO: refactor it to resolve time complexity
         for card in YELLOW_CARDS + PURPLE_CARDS:
             if str(card.sticker["id"]) == id:

@@ -1,10 +1,10 @@
-import logging
+from logging import getLogger
 
 from errors import (
+    AlreadyJoinedError,
+    LobbyClosedError,
     NoGameInChatError,
     NotEnoughPlayersError,
-    LobbyClosedError,
-    AlreadyJoinedError,
 )
 from game import Game
 from player import Player
@@ -18,7 +18,7 @@ class GameManager:
         self.userid_players = {}
         self.userid_current = {}
 
-        self.logger = logging.getLogger(__name__)
+        self.logger = getLogger(__name__)
 
     def new_game(self, chat):
         """

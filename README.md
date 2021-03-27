@@ -1,6 +1,6 @@
 # Yellow Cards Bot
 
-> A yellow cards game bot inspired by mau_mau_bot
+> A yellow cards game bot inspired by [mau_mau_bot](https://github.com/jh0ker/mau_mau_bot)
 
 ## 遊玩
 

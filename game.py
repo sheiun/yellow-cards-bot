@@ -1,13 +1,18 @@
 from __future__ import annotations
 
-import logging
 from enum import IntEnum
-from typing import Optional
+from logging import getLogger
+from typing import TYPE_CHECKING, List, Optional
 
 from board import Board
 from card import PURPLE_CARDS, YELLOW_CARDS
 from config import OPEN_LOBBY
 from deck import Deck
+
+if TYPE_CHECKING:
+    from telegram import User
+
+    from player import Player
 
 
 class Game:
@@ -21,8 +26,8 @@ class Game:
         DISCARD = 4
         END = 5
 
-    current_player: Optional["User"] = None
-    starter: Optional["User"] = None
+    current_player: Optional[User] = None
+    starter: Optional[User] = None
     state: Game.State = State.START
     open = OPEN_LOBBY
 
@@ -33,7 +38,7 @@ class Game:
         self.purple_deck = Deck()
         self.board = Board(self)
 
-        self.logger = logging.getLogger(__name__)
+        self.logger = getLogger(__name__)
 
     @property
     def started(self) -> bool:
@@ -85,14 +90,14 @@ class Game:
             return 5
         return 4
 
-    def get_loser(self):
+    def get_loser(self) -> Optional[Player]:
         count = self.get_end_count()
         for player in self.players:
             if -player.score >= count:
                 return player
         return None
 
-    def get_winners(self) -> list:
+    def get_winners(self) -> List[Player]:
         loser = self.get_loser()
         if loser is None:
             # TODO: 建一個 winners haven't appeared error

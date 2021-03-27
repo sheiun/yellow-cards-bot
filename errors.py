@@ -20,3 +20,6 @@ class DeckEmptyError(Exception):
 
 class TooManyCardsError(Exception):
     pass
+
+class CanNotDiscardError(Exception):
+    pass

@@ -2,13 +2,9 @@ import unittest
 
 from game import Game
 from player import Player
-import card as c
 
 
 class Test(unittest.TestCase):
-
-    game = None
-
     def setUp(self):
         self.game = Game(None)
 

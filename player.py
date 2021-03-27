@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import logging
+from logging import getLogger
 
-from card import YELLOW
-from errors import TooManyCardsError, NotEnoughPlayersError
+from card import YELLOW, Card
+from errors import CanNotDiscardError, NotEnoughPlayersError, TooManyCardsError
 
 
 class Player:
@@ -14,6 +14,9 @@ class Player:
     other players by placing itself behind the current player.
     """
 
+    prev: Player
+    next: Player
+
     def __init__(self, game, user):
         self.game = game
         self.user = user
@@ -23,7 +26,7 @@ class Player:
         self.purple_cards = []
         self.score = 0
 
-        self.logger = logging.getLogger(__name__)
+        self.logger = getLogger(__name__)
 
         # Check if this player is the first player in this game.
         if game.current_player:
@@ -79,7 +82,7 @@ class Player:
         while len(self.cards) < 13:
             self.cards.append(self.game.yellow_deck.draw())
 
-    def play(self, card: "Card"):
+    def play(self, card: Card):
         """Plays a card and removes it from hand"""
         if card.color == YELLOW:
             if len(self.game.board.yellow[self]) >= self.game.board.purple.space:
@@ -87,22 +90,37 @@ class Player:
             self.cards.remove(card)
         self.game.board.play_card_by(self, card)
 
-    def discard(self, card: "Card"):
+    def discard(self, card: Card):
+        """Disacrd a card from the game
+
+        Args:
+            card (Card): A card object to discard
+
+        Raises:
+            CanNotDiscardError: When the discard_amount is equals to 0
+        """
         if self.discard_amount == 0:
-            # TODO:
-            raise Exception("You can't disacrd!")
+            raise CanNotDiscardError()
         self.cards.remove(card)
 
     @property
     def discarded(self) -> bool:
-        # own cards + played cards + discarded cards == 13
+        """A bool value to validate whether the cards are discarded.
+    
+        Returns:
+            bool: Own cards equal to 13 - space of the purple card - discard amount
+        """
         return (
             len(self.cards) == 13 - self.game.board.purple.space - self.discard_amount
         )
 
     @property
     def can_play(self) -> bool:
-        """Player can play a yellow card"""
+        """Player can play a yellow card
+
+        Returns:
+            bool: [description]
+        """
         purple_card = self.game.board.purple
         return (
             self.game.current_player != self

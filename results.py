@@ -1,12 +1,21 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, List
+
 from telegram import InlineQueryResultArticle
 from telegram import InlineQueryResultCachedSticker as Sticker
 from telegram import InputTextMessageContent
 
 from card import YELLOW_CARD
-from game import Game
+
+if TYPE_CHECKING:
+    from telegram import InlineQueryResult
+
+    from game import Game
+    from player import Player
 
 
-def add_purple_cards(results, game: "Game"):
+def add_purple_cards(results: List[InlineQueryResult], game: Game):
     """Add purple cards"""
     for card in game.purple_deck.cards[-2:]:
         results.append(
@@ -14,7 +23,7 @@ def add_purple_cards(results, game: "Game"):
         )
 
 
-def add_cards(results, player):
+def add_cards(results: List[InlineQueryResult], player: Player):
     """Add player's cards"""
     content = "選ㄌ一張 " + YELLOW_CARD
     for card in player.cards:
@@ -27,7 +36,7 @@ def add_cards(results, player):
         )
 
 
-def add_no_game(results):
+def add_no_game(results: List[InlineQueryResult]):
     """Add text result if user is not playing"""
     results.append(
         InlineQueryResultArticle(
@@ -38,7 +47,7 @@ def add_no_game(results):
     )
 
 
-def add_not_started(results):
+def add_not_started(results: List[InlineQueryResult]):
     """Add text result if the game has not yet started"""
     results.append(
         InlineQueryResultArticle(
